@@ -1,100 +1,107 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { FaGithub, FaTwitter, FaLinkedin } from "react-icons/fa";
+import DoneDashLogo from "./DoneDashLogo";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
 
+  const footerLinks = {
+    marketplace: [
+      { name: "About Us", href: "#" },
+      { name: "How It Works", href: "#" },
+      { name: "Trust & Safety", href: "#" },
+    ],
+    legal: [
+      { name: "Privacy Policy", href: "#" },
+      { name: "Terms of Service", href: "#" },
+    ],
+    support: [{ name: "Help Center", href: "#" }],
+  };
+
   return (
-    <footer className="w-full border-t border-gray-200 bg-white pt-12 pb-8">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-4">
-          {/* Brand Section */}
-          <div className="col-span-1 md:col-span-1">
-            <Link to="/" className="text-xl font-bold text-blue-600">
-              MERN<span className="text-gray-900">App</span>
-            </Link>
-            <p className="mt-4 text-sm text-gray-500 leading-relaxed">
-              Building the future of web applications with the MERN stack and
-              modern styling.
+    <footer className="bg-white border-t border-gray-100 mt-20">
+      <div className="max-w-7xl mx-auto px-6 py-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 lg:gap-8">
+          {/* Brand & Mission - Takes up 2 columns on large screens */}
+          <div className="lg:col-span-2">
+            <DoneDashLogo size={6} textSize="text-2xl" />
+            <p className="text-gray-500 text-sm leading-relaxed max-w-xs mb-6">
+              The Academic Advisor Marketplace. Connecting talent with
+              opportunity in a campus-curated environment.
             </p>
+            <div className="flex gap-4">
+              <FaTwitter className="text-gray-400 hover:text-teal-600 cursor-pointer transition-colors" />
+              <FaGithub className="text-gray-400 hover:text-teal-600 cursor-pointer transition-colors" />
+              <FaLinkedin className="text-gray-400 hover:text-teal-600 cursor-pointer transition-colors" />
+            </div>
           </div>
 
-          {/* Quick Links */}
+          {/* Dynamic Links Generation */}
           <div>
-            <h3 className="text-sm font-semibold uppercase tracking-wider text-gray-900">
-              Platform
+            <h3 className="text-xs font-bold text-gray-900 uppercase tracking-widest mb-5">
+              Marketplace
             </h3>
-            <ul className="mt-4 space-y-2">
-              <li>
-                <Link
-                  to="/"
-                  className="text-sm text-gray-600 hover:text-blue-600 transition-colors"
-                >
-                  Home
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/about"
-                  className="text-sm text-gray-600 hover:text-blue-600 transition-colors"
-                >
-                  Dashboard
-                </Link>
-              </li>
+            <ul className="space-y-3">
+              {footerLinks.marketplace.map((link) => (
+                <li key={link.name}>
+                  <a
+                    href={link.href}
+                    className="text-sm text-gray-500 hover:text-teal-600 transition-colors"
+                  >
+                    {link.name}
+                  </a>
+                </li>
+              ))}
             </ul>
           </div>
 
-          {/* Resources */}
           <div>
-            <h3 className="text-sm font-semibold uppercase tracking-wider text-gray-900">
+            <h3 className="text-xs font-bold text-gray-900 uppercase tracking-widest mb-5">
+              Legal
+            </h3>
+            <ul className="space-y-3">
+              {footerLinks.legal.map((link) => (
+                <li key={link.name}>
+                  <a
+                    href={link.href}
+                    className="text-sm text-gray-500 hover:text-teal-600 transition-colors"
+                  >
+                    {link.name}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div>
+            <h3 className="text-xs font-bold text-gray-900 uppercase tracking-widest mb-5">
               Support
             </h3>
-            <ul className="mt-4 space-y-2">
-              <li>
-                <Link
-                  to="/docs"
-                  className="text-sm text-gray-600 hover:text-blue-600 transition-colors"
-                >
-                  Documentation
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/help"
-                  className="text-sm text-gray-600 hover:text-blue-600 transition-colors"
-                >
-                  Help Center
-                </Link>
-              </li>
+            <ul className="space-y-3">
+              {footerLinks.support.map((link) => (
+                <li key={link.name}>
+                  <a
+                    href={link.href}
+                    className="text-sm text-gray-500 hover:text-teal-600 transition-colors"
+                  >
+                    {link.name}
+                  </a>
+                </li>
+              ))}
             </ul>
-          </div>
-
-          {/* Newsletter / Contact */}
-          <div>
-            <h3 className="text-sm font-semibold uppercase tracking-wider text-gray-900">
-              Stay Updated
-            </h3>
-            <p className="mt-4 text-sm text-gray-500">
-              Subscribe to our newsletter.
-            </p>
-            <form className="mt-4 flex gap-2">
-              <input
-                type="email"
-                placeholder="Email"
-                className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none"
-              />
-              <button className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700">
-                Join
-              </button>
-            </form>
           </div>
         </div>
 
         {/* Bottom Bar */}
-        <div className="mt-12 border-t border-gray-100 pt-8 text-center">
-          <p className="text-sm text-gray-400">
-            &copy; {currentYear} MERNApp Inc. All rights reserved.
+        <div className="border-t border-gray-100 mt-16 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+          <p className="text-xs text-gray-400">
+            © {currentYear} DoneDash. All rights reserved.
           </p>
+          <div className="flex gap-6">
+            <span className="text-xs text-gray-400 italic">
+              Built for the academic community.
+            </span>
+          </div>
         </div>
       </div>
     </footer>
