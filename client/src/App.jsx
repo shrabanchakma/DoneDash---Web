@@ -2,10 +2,13 @@ import { Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import MainLayout from "./layouts/MainLayout";
 import About from "./pages/About";
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
+import AuthLayout from "./layouts/AuthLayout";
 
 function App() {
   return (
-    <div className="App">
+    <>
       {/* <Route path="/login" element={<Login />} /> */}
       <Routes>
         <Route element={<MainLayout />}>
@@ -13,7 +16,11 @@ function App() {
           <Route path="/about" element={<About />} />
         </Route>
       </Routes>
-    </div>
+      <Routes element={<AuthLayout />}>
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
+      </Routes>
+    </>
   );
 }
 

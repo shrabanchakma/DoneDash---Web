@@ -1,6 +1,7 @@
 import React from "react";
 import { LuBell } from "react-icons/lu";
 import logo from "../assets/images/donedash logo.png";
+import profileIcon from "../assets/profile-icon.jpeg";
 const Navbar = () => {
   return (
     <nav className="sticky top-0 z-50 w-full bg-white/80 backdrop-blur-md border-b border-gray-100">
@@ -15,8 +16,9 @@ const Navbar = () => {
                 className="w-full h-full object-contain "
               />
             </div>
-            <h1 className="text-3xl font-bold tracking-tight text-[#27788e] ">
-              Done<span className="text-[#2d7b90] font-normal">Dash</span>
+            <h1 className="text-3xl font-bold tracking-tight text-brand-primary ">
+              Done
+              <span className="text-brand-primary font-normal">Dash</span>
             </h1>
           </div>
 
@@ -46,7 +48,7 @@ const Navbar = () => {
 
             <button className="flex items-center gap-2 group">
               <img
-                src="https://i.pravatar.cc/40"
+                src={profileIcon}
                 alt="Profile"
                 className="w-9 h-9 rounded-full object-cover ring-2 ring-transparent group-hover:ring-teal-500 transition-all duration-200"
               />
