@@ -1,8 +1,36 @@
-import React from "react";
+import React, { use, useEffect, useRef, useState } from "react";
 import { LuBell } from "react-icons/lu";
 import logo from "../assets/images/donedash-logo.png";
 import profileIcon from "../assets/profile-icon.jpeg";
+import { signOut } from "firebase/auth";
+import { auth } from "../firebase/firebase";
+import { Link, NavLink, useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
+import { navConfig } from "../constants/navConfig";
+
 const Navbar = () => {
+  const { user, role } = useAuth();
+  console.log(user);
+  const [open, setOpen] = useState(false);
+  const dropdownRef = useRef();
+  const navigate = useNavigate();
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const links = navConfig[role] || navConfig.guest;
+  const handleLogout = async () => {
+    await signOut(auth);
+    navigate("/");
+  };
+
   return (
     <nav className="sticky top-0 z-50 w-full bg-white/80 backdrop-blur-md border-b border-gray-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 ">
@@ -24,17 +52,22 @@ const Navbar = () => {
 
           {/* Navigation Links */}
           <div className="hidden md:flex items-center gap-1">
-            {["Home", "Feature", "Pricing", "How It Works", "Blog"].map(
-              (item) => (
-                <a
-                  key={item}
-                  href="#"
-                  className="px-4 py-2 text-sm font-medium text-gray-600 rounded-full transition-all duration-200 hover:text-teal-600 hover:bg-teal-50"
-                >
-                  {item}
-                </a>
-              ),
-            )}
+            {links.map((item) => (
+              <NavLink
+                key={item.label}
+                to={item.path}
+                // 2. Use the isActive callback to toggle classes
+                className={({ isActive }) =>
+                  `px-4 py-2 text-sm font-medium rounded-full transition-all duration-200 ${
+                    isActive
+                      ? "text-teal-600 bg-teal-50 shadow-sm" // Active Styles
+                      : "text-gray-600 hover:text-teal-600 hover:bg-teal-50" // Inactive Styles
+                  }`
+                }
+              >
+                {item.label}
+              </NavLink>
+            ))}
           </div>
 
           {/* Action Icons & Profile */}
@@ -45,14 +78,36 @@ const Navbar = () => {
             </button>
 
             <div className="h-8 w-px bg-gray-200 mx-1"></div>
+            <div className="relative" ref={dropdownRef}>
+              <button
+                onClick={() => setOpen(!open)}
+                className="flex items-center gap-2 group"
+              >
+                <img
+                  src={profileIcon}
+                  alt="Profile"
+                  className="w-9 h-9 rounded-full object-cover ring-2 ring-transparent group-hover:ring-teal-500 transition-all duration-200 hover:cursor-pointer"
+                />
+              </button>
+              {/* Dropdown */}
+              {open && user && (
+                <div className="absolute right-0 mt-3 w-40 bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden">
+                  <button
+                    onClick={() => navigate("/profile")}
+                    className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:cursor-pointer"
+                  >
+                    {user?.email}
+                  </button>
 
-            <button className="flex items-center gap-2 group">
-              <img
-                src={profileIcon}
-                alt="Profile"
-                className="w-9 h-9 rounded-full object-cover ring-2 ring-transparent group-hover:ring-teal-500 transition-all duration-200"
-              />
-            </button>
+                  <button
+                    onClick={handleLogout}
+                    className="w-full text-left px-4 py-2 text-sm text-red-500 hover:bg-red-50 hover:cursor-pointer"
+                  >
+                    Logout
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>
