@@ -27,22 +27,66 @@ const Signup = () => {
       [name]: type === "checkbox" ? checked : value,
     }));
   };
-  const handleSignup = async () => {
-    try {
-      const { firstName, lastName, email, password, agreedToTerms } = formData;
-      console.log("Signup Attempt:", {
-        firstName,
-        lastName,
-        email,
-        password,
-        role,
-        agreedToTerms,
-      });
 
-      if (!agreedToTerms) {
-        alert("You must agree to the terms.");
-        return;
+  const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false);
+  const handleSignup = async () => {
+    const { firstName, lastName, email, password, agreedToTerms } = formData;
+    const newErrors = {};
+    // Basic Empty Field Validation
+    if (!firstName.trim()) newErrors.firstName = "First name is required";
+    if (!lastName.trim()) newErrors.lastName = "Last name is required";
+
+    // Email Regex Validation (checks for @ and domain)
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!email) {
+      newErrors.email = "Email is required";
+    } else if (!emailRegex.test(email)) {
+      newErrors.email = "Please enter a valid email address";
+    }
+
+    // Password Length Validation
+    // Password Validation Logic
+    if (!password) {
+      newErrors.password = "Password is required";
+    } else {
+      // Regex: At least 8 chars, 1 uppercase, 1 number, 1 special character
+
+      if (password.length < 8) {
+        newErrors.password = "Password must be at least 8 characters long";
+      } else if (!/(?=.*[A-Z])/.test(password)) {
+        newErrors.password = "Must include at least one uppercase letter";
+      } else if (!/(?=.*\d)/.test(password)) {
+        newErrors.password = "Must include at least one number";
+      } else if (!/(?=.*[!@#$%^&*])/.test(password)) {
+        newErrors.password = "Must include at least one special symbol";
       }
+    }
+    // Terms Validation
+    if (!agreedToTerms) {
+      newErrors.agreedToTerms = "You must accept the terms to continue";
+    }
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
+    setErrors({});
+    console.log("Signup Attempt:", {
+      firstName,
+      lastName,
+      email,
+      password,
+      role,
+      agreedToTerms,
+    });
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
+
+    setLoading(true);
+    try {
       // const userCredential = await createUserWithEmailAndPassword(
       //   auth,
       //   email,
@@ -59,6 +103,9 @@ const Signup = () => {
       // });
     } catch (error) {
       console.error(error.message);
+      setErrors({ server: error.message });
+    } finally {
+      setLoading(false);
     }
   };
   return (
@@ -171,6 +218,12 @@ const Signup = () => {
                 onChange={handleChange}
                 className="w-full bg-gray-100 px-4 py-3 rounded-xl outline-none"
               />
+              {/* Error Message */}
+              {errors.firstName && (
+                <p className="text-red-500 text-xs mt-1 ml-1">
+                  {errors.firstName}
+                </p>
+              )}
             </div>
 
             {/* Last Name */}
@@ -186,6 +239,12 @@ const Signup = () => {
                 onChange={handleChange}
                 className="w-full bg-gray-100 px-4 py-3 rounded-xl outline-none"
               />
+              {/* Error Message */}
+              {errors.lastName && (
+                <p className="text-red-500 text-xs mt-1 ml-1">
+                  {errors.lastName}
+                </p>
+              )}
             </div>
           </div>
 
@@ -205,6 +264,10 @@ const Signup = () => {
                 className="bg-transparent outline-none w-full"
               />
             </div>
+            {/* Email Error Message */}
+            {errors.email && (
+              <p className="text-red-500 text-xs mt-1 ml-1">{errors.email}</p>
+            )}
           </div>
 
           {/* Password */}
@@ -232,9 +295,16 @@ const Signup = () => {
                 )}
               </button>
             </div>
-            <p className="text-xs text-gray-400 mt-1">
-              Must be at least 8 characters long.
-            </p>
+            {/* Password Error Message */}
+            {errors.password ? (
+              <p className="text-red-500 text-xs mt-1 ml-1">
+                {errors.password}
+              </p>
+            ) : (
+              <p className="text-[10px] text-gray-400 mt-1 leading-tight">
+                8+ characters, including 1 uppercase, 1 number, and 1 symbol.
+              </p>
+            )}
           </div>
 
           {/* Terms */}
@@ -257,6 +327,12 @@ const Signup = () => {
               </span>
             </p>
           </div>
+          {/* Terms Error Message */}
+          {errors.agreedToTerms && (
+            <p className="text-red-500 text-xs mt-1 ml-1">
+              {errors.agreedToTerms}
+            </p>
+          )}
 
           {/* Submit */}
           <div className="relative w-full mt-6 group">
@@ -264,7 +340,7 @@ const Signup = () => {
             <div className="absolute inset-0 rounded-full bg-[#348293] blur-md opacity-0 group-hover:opacity-60 transition duration-300" />
 
             {/* Border wrapper (teal only) */}
-            <div className="relative p-[2px] rounded-full bg-[#348293]">
+            <div className="relative p-0.5 rounded-full bg-[#348293]">
               {/* Button */}
               <button
                 onClick={handleSignup}
