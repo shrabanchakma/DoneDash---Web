@@ -3,7 +3,10 @@ import PropTypes from "prop-types";
 import { Mail, Lock } from "lucide-react";
 import { FcGoogle } from "react-icons/fc";
 import { FaApple } from "react-icons/fa";
+import DoneDashLogo from "../components/DoneDashLogo";
+import { useNavigate } from "react-router-dom";
 const Login = () => {
+  const navigate = useNavigate();
   return (
     <div className="min-h-screen grid grid-cols-1 lg:grid-cols-2 bg-base">
       {/* ───────── LEFT SIDE (Image Section) ───────── */}
@@ -36,9 +39,12 @@ const Login = () => {
       <div className="flex items-center justify-center px-6 py-10">
         <div className="w-full max-w-md bg-white rounded-3xl shadow-xl p-8">
           {/* Logo */}
-          <h1 className="text-3xl font-bold text-center text-primary mb-2">
+          {/* <h1 className="text-3xl font-bold text-center text-primary mb-2">
             DoneDash
-          </h1>
+          </h1> */}
+          <div className="flex justify-center w-full">
+            <DoneDashLogo />
+          </div>
 
           <p className="text-center text-gray-500 mb-8">
             Sign in to your atelier
@@ -81,7 +87,7 @@ const Login = () => {
           </div>
 
           {/* Button */}
-          <button className="w-full mt-6 bg-primary hover:opacity-90 text-white font-semibold py-3 rounded-full transition">
+          <button className="w-full mt-6 bg-brand-primary hover:cursor-pointer  active:opacity-100 hover:opacity-90 text-white font-semibold py-3 rounded-full transition">
             SIGN IN
           </button>
 
@@ -93,22 +99,25 @@ const Login = () => {
           </div>
 
           {/* Social Buttons */}
-          <div className="space-y-3">
-            <button className="w-full border border-gray-200 py-3 rounded-full flex items-center justify-center gap-2 text-gray-600 hover:bg-gray-50">
+          <div className="space-y-3 ">
+            <button className="w-full border border-gray-200 py-3 rounded-full flex items-center justify-center gap-2 text-gray-600 hover:bg-gray-50 hover:cursor-pointer active:bg-gray-100">
               <FcGoogle /> GOOGLE
             </button>
 
-            <button className="w-full border border-gray-200 py-3 rounded-full flex items-center justify-center gap-2 text-gray-600 hover:bg-gray-50">
-              <FaApple className="text-xl" /> APPLE
+            <button className="w-full border border-gray-200 py-3 rounded-full flex items-center justify-center gap-2 text-gray-600 hover:bg-gray-50 hover:cursor-pointer active:bg-gray-100">
+              <FaApple className="text-xl " /> APPLE
             </button>
           </div>
 
           {/* Bottom */}
           <p className="text-center text-sm text-gray-500 mt-6">
             Don’t have an account?{" "}
-            <span className="text-primary font-medium cursor-pointer hover:underline">
+            <button
+              onClick={() => navigate("/signup")}
+              className="text-primary font-medium cursor-pointer hover:underline"
+            >
               Apply now
-            </span>
+            </button>
           </p>
         </div>
       </div>

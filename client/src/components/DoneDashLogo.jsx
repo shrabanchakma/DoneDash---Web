@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import logo from "../assets/images/donedash logo.png";
+import logo from "../assets/images/donedash-logo.png";
 
 const DoneDashLogo = ({ size = 12, textSize = "text-3xl" }) => {
   return (

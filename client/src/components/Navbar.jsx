@@ -1,6 +1,6 @@
 import React from "react";
 import { LuBell } from "react-icons/lu";
-import logo from "../assets/images/donedash logo.png";
+import logo from "../assets/images/donedash-logo.png";
 import profileIcon from "../assets/profile-icon.jpeg";
 const Navbar = () => {
   return (
