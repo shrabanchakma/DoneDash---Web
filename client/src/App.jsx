@@ -5,6 +5,8 @@ import About from "./pages/About";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import AuthLayout from "./layouts/AuthLayout";
+import Feed from "./pages/Feed";
+import ProtectedRoute from "../routes/ProtectedRoute";
 
 function App() {
   return (
@@ -14,6 +16,14 @@ function App() {
         <Route element={<MainLayout />}>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
+          <Route
+            path="/feed"
+            element={
+              <ProtectedRoute>
+                <Feed />
+              </ProtectedRoute>
+            }
+          />
         </Route>
       </Routes>
       <Routes element={<AuthLayout />}>

@@ -4,10 +4,12 @@ import DoneDashLogo from "../components/DoneDashLogo";
 import { useNavigate } from "react-router-dom";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "../firebase/firebase";
-import { doc, setDoc } from "firebase/firestore";
+import { doc, serverTimestamp, setDoc } from "firebase/firestore";
 import { LuEye, LuEyeClosed } from "react-icons/lu";
+import { useAuth } from "../../context/AuthContext";
 
 const Signup = () => {
+  // const { loading } = useAuth();
   const navigate = useNavigate();
   const [role, setRole] = useState("poster");
   const [formData, setFormData] = useState({
@@ -29,7 +31,6 @@ const Signup = () => {
   };
 
   const [errors, setErrors] = useState({});
-  const [loading, setLoading] = useState(false);
   const handleSignup = async () => {
     const { firstName, lastName, email, password, agreedToTerms } = formData;
     const newErrors = {};
@@ -85,27 +86,28 @@ const Signup = () => {
       return;
     }
 
-    setLoading(true);
     try {
-      // const userCredential = await createUserWithEmailAndPassword(
-      //   auth,
-      //   email,
-      //   password
-      // );
-      // const user = userCredential.user;
-      // // Save extra data (role)
-      // await setDoc(doc(db, "users", user.uid), {
-      //   firstName,
-      //   lastName,
-      //   email,
-      //   role, // "poster" | "helper"
-      //   createdAt: new Date(),
-      // });
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password,
+      );
+
+      const user = userCredential.user;
+
+      // Save extra data (role)
+      await setDoc(doc(db, "users", user.uid), {
+        firstName: firstName.toLowerCase().trim(),
+        lastName: lastName.toLowerCase().trim(),
+        email: email.toLowerCase().trim(),
+        role,
+        createdAt: serverTimestamp(),
+      });
+      // navigate back to home
+      navigate("/feed");
     } catch (error) {
       console.error(error.message);
       setErrors({ server: error.message });
-    } finally {
-      setLoading(false);
     }
   };
   return (
