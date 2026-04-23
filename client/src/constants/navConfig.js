@@ -7,7 +7,7 @@ export const navConfig = {
     { label: "How It Works", path: "/how-it-works" },
   ],
   poster: [
-    { label: "Home", path: "/" },
+    { label: "Home", path: "/feed" },
     { label: "Post a Job", path: "/post-job" },
     { label: "My Posted Jobs", path: "/my-jobs" },
     { label: "View Proposals", path: "/proposals" },

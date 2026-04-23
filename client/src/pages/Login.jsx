@@ -10,9 +10,11 @@ import { signInWithEmailAndPassword } from "firebase/auth"; // ADDED: Firebase A
 import { auth } from "../firebase/firebase"; // ADDED: Firebase Config
 import { useAuth } from "../../context/AuthContext";
 import { AiOutlineLoading } from "react-icons/ai";
+import toast from "react-hot-toast";
 const Login = () => {
   const navigate = useNavigate();
-  const { loading } = useAuth();
+  // const { loading } = useAuth();
+  const [isSubmitting, setIsSubmitting] = useState(false);
   // CHANGE 1: Form State Management
   const [formData, setFormData] = useState({
     email: "",
@@ -35,6 +37,7 @@ const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     setErrors({});
+    setIsSubmitting(true);
 
     const { email, password } = formData;
     const newErrors = {};
@@ -54,14 +57,18 @@ const Login = () => {
         email,
         password,
       );
+      const loadingToast = toast.loading("Logging in...");
 
       // 2. LOGIC CHECK: Ensure the user object exists in the credential
-      if (!loading) {
-        console.log("Login successful, moving to feed...", userCredential.user);
 
-        // Use replace: true to prevent the user from clicking 'back' into the login page
-        navigate("/feed", { replace: true });
-      }
+      toast.success("Welcome back to DoneDash!", {
+        id: loadingToast, // Replaces the loading toast
+        duration: 4000,
+        icon: "👋",
+      });
+      navigate("/feed");
+
+      // Use replace: true to prevent the user from clicking 'back' into the login page
     } catch (error) {
       console.error(error.code);
       // Map Firebase codes to user-friendly messages
@@ -72,6 +79,8 @@ const Login = () => {
       } else {
         setErrors({ server: "Login failed. Please check your connection." });
       }
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -189,11 +198,11 @@ const Login = () => {
           {/* CHANGE 8: Submit Button with Loading State */}
           <button
             onClick={handleLogin}
-            disabled={loading}
+            disabled={isSubmitting}
             className={`w-full mt-6 bg-[#348293] text-white font-semibold py-3 rounded-full transition-all active:scale-[0.98] flex items-center justify-center 
-              ${loading ? "opacity-70 cursor-not-allowed" : "hover:opacity-90 cursor-pointer"}`}
+              ${isSubmitting ? "opacity-70 cursor-not-allowed" : "hover:opacity-90 cursor-pointer"}`}
           >
-            {loading ? (
+            {isSubmitting ? (
               <>
                 <AiOutlineLoading className="w-5 h-5 animate-spin" />
               </>

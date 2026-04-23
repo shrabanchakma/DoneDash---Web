@@ -4,16 +4,17 @@ import logo from "../assets/images/donedash-logo.png";
 import profileIcon from "../assets/profile-icon.jpeg";
 import { signOut } from "firebase/auth";
 import { auth } from "../firebase/firebase";
-import { Link, NavLink, useNavigate } from "react-router-dom";
+import { Link, Navigate, NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { navConfig } from "../constants/navConfig";
 
 const Navbar = () => {
-  const { user, role } = useAuth();
+  const { user, role, firstName } = useAuth();
   console.log(user);
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef();
   const navigate = useNavigate();
+
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
@@ -27,16 +28,30 @@ const Navbar = () => {
 
   const links = navConfig[role] || navConfig.guest;
   const handleLogout = async () => {
-    await signOut(auth);
-    navigate("/");
+    try {
+      await signOut(auth);
+      // This wipes the React state entirely and redirects to the landing page
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
   };
-
+  const handleLogoClick = () => {
+    console.log("click");
+    if (user) {
+      navigate("/feed");
+    } else {
+      navigate("/");
+    }
+  };
   return (
     <nav className="sticky top-0 z-50 w-full bg-white/80 backdrop-blur-md border-b border-gray-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 ">
         <div className="flex h-16 items-center justify-between ">
           {/* Logo Section */}
-          <div className="shrink-0 flex items-center gap-2 ">
+          <div
+            onClick={handleLogoClick}
+            className="shrink-0 flex items-center gap-2 hover:cursor-pointer active:scale-95"
+          >
             <div className="w-12 h-12 rounded-lg flex items-center justify-center">
               <img
                 src={logo}
@@ -96,7 +111,7 @@ const Navbar = () => {
                     onClick={() => navigate("/profile")}
                     className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:cursor-pointer"
                   >
-                    {user?.email}
+                    {firstName} - {role}
                   </button>
 
                   <button

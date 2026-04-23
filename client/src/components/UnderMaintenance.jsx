@@ -26,7 +26,7 @@ const UnderMaintenance = () => {
 
       {/* Action Button */}
       <button
-        onClick={() => navigate(-1)}
+        onClick={() => navigate("/")}
         className="bg-brand-primary hover:bg-brand-primary/90 text-white px-8 py-3 rounded-full font-semibold transition-all shadow-md active:scale-95"
       >
         Take me back to safety

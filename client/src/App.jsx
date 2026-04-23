@@ -10,23 +10,17 @@ import ProtectedRoute from "../routes/ProtectedRoute";
 import DashboardLayout from "./layouts/DashboardLayout";
 import Profile from "./pages/Profile";
 import UnderMaintenance from "./components/UnderMaintenance";
-
+import { Toaster } from "react-hot-toast";
 function App() {
   return (
     <>
       {/* <Route path="/login" element={<Login />} /> */}
+      <Toaster position="top-center" reverseOrder={false} />
       <Routes>
         <Route element={<MainLayout />}>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
-          <Route
-            path="/feed"
-            element={
-              <ProtectedRoute>
-                <UnderMaintenance />
-              </ProtectedRoute>
-            }
-          />
+
           <Route path="/features" element={<UnderMaintenance />} />
           <Route path="/pricing" element={<UnderMaintenance />} />
           <Route path="/how-it-works" element={<UnderMaintenance />} />
@@ -40,13 +34,20 @@ function App() {
           <Route path="/admin/reports" element={<UnderMaintenance />} />
           <Route path="/admin/settings" element={<UnderMaintenance />} />
         </Route>
-      </Routes>
-      <Routes element={<AuthLayout />}>
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
-      </Routes>
-      <Routes element={<DashboardLayout />}>
-        <Route path="/profile" element={<Profile />} />
+        <Route element={<AuthLayout />}>
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+        </Route>
+        <Route
+          element={
+            <ProtectedRoute>
+              <DashboardLayout />
+            </ProtectedRoute>
+          }
+        >
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/feed" element={<UnderMaintenance />} />
+        </Route>
       </Routes>
     </>
   );

@@ -7,11 +7,14 @@ import { auth, db } from "../firebase/firebase";
 import { doc, serverTimestamp, setDoc } from "firebase/firestore";
 import { LuEye, LuEyeClosed } from "react-icons/lu";
 import { useAuth } from "../../context/AuthContext";
+import toast from "react-hot-toast";
+import { AiOutlineLoading } from "react-icons/ai";
 
 const Signup = () => {
   // const { loading } = useAuth();
   const navigate = useNavigate();
   const [role, setRole] = useState("poster");
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -32,6 +35,7 @@ const Signup = () => {
 
   const [errors, setErrors] = useState({});
   const handleSignup = async () => {
+    setIsSubmitting(true);
     const { firstName, lastName, email, password, agreedToTerms } = formData;
     const newErrors = {};
     // Basic Empty Field Validation
@@ -70,6 +74,7 @@ const Signup = () => {
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
+      setIsSubmitting(false);
       return;
     }
     setErrors({});
@@ -83,6 +88,7 @@ const Signup = () => {
     });
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
+      setIsSubmitting(false);
       return;
     }
 
@@ -103,11 +109,19 @@ const Signup = () => {
         role,
         createdAt: serverTimestamp(),
       });
+      const loadingToast = toast.loading("Logging in...");
       // navigate back to home
+      toast.success("Welcome back to DoneDash!", {
+        id: loadingToast, // Replaces the loading toast
+        duration: 4000,
+        icon: "👋",
+      });
       navigate("/feed");
     } catch (error) {
       console.error(error.message);
       setErrors({ server: error.message });
+    } finally {
+      setIsSubmitting(false);
     }
   };
   return (
@@ -346,21 +360,24 @@ const Signup = () => {
               {/* Button */}
               <button
                 onClick={handleSignup}
-                className="
-      w-full 
-      bg-[#348293] 
-      text-white 
-      font-semibold 
-      py-3 
-      rounded-full 
-      transition-all duration-200 
-      hover:opacity-90 
-      active:scale-[0.98] 
-      active:bg-[#2c6f7d] 
-      cursor-pointer
-    "
+                disabled={isSubmitting}
+                className={`
+        w-full 
+        bg-[#348293] 
+        text-white 
+        font-semibold 
+        py-3 
+        rounded-full 
+        transition-all duration-200 
+        flex items-center justify-center gap-2
+        ${isSubmitting ? "opacity-70 cursor-not-allowed" : "hover:opacity-90 active:scale-[0.98] active:bg-[#2c6f7d] cursor-pointer"}
+      `}
               >
-                Create Account →
+                {isSubmitting ? (
+                  <AiOutlineLoading className="w-5 h-5 animate-spin" />
+                ) : (
+                  "Create Account →"
+                )}
               </button>
             </div>
           </div>
