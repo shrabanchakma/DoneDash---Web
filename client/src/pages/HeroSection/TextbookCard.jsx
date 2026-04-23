@@ -1,3 +1,4 @@
+import helpImage from "../../assets/images/help.png";
 const TextbookCard = () => {
   return (
     <div className="absolute top-0 right-0 bg-white rounded-2xl shadow-xl p-4 w-64 z-10 animate-float-medium">
@@ -20,19 +21,27 @@ const TextbookCard = () => {
           </div>
           <div>
             <p className="text-sm font-semibold text-gray-800 leading-tight">
-              Calculus Early Transcendentals
+              Help, next door.
             </p>
             <p className="text-xs text-gray-400 mt-0.5">
-              8th Edition • Like New
+              Earn extra cash or get tasks done by verified students in your
+              campus community.
             </p>
           </div>
         </div>
         <span className="text-sm font-bold text-teal-600 ml-2">$45</span>
       </div>
-      <div className="w-full h-28 bg-gradient-to-br from-teal-700 to-teal-900 rounded-xl flex items-center justify-center overflow-hidden relative">
+      {/* <div className="w-full h-28 bg-gradient-to-br from-teal-700 to-teal-900 rounded-xl flex items-center justify-center overflow-hidden relative">
         <div className="w-16 h-24 bg-gray-100 rounded shadow-inner relative flex items-end justify-center pb-2">
           <div className="w-3 h-4 bg-red-500 rounded-sm" />
         </div>
+      </div> */}
+      <div className="overflow-hidden">
+        <img
+          src={helpImage}
+          alt="Help and Support"
+          className="w-full h-28 object-cover rounded-xl opacity-80 scale-125"
+        />
       </div>
     </div>
   );
