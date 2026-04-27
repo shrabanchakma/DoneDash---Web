@@ -1,4 +1,4 @@
-import React, { use, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { LuBell } from "react-icons/lu";
 import logo from "../assets/images/donedash-logo.png";
 import profileIcon from "../assets/profile-icon.jpeg";
