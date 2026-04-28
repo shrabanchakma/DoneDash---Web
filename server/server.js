@@ -8,7 +8,12 @@ import jobRoutes from "./routes/jobRoutes.js";
 const app = express();
 
 // middleware
-app.use(cors());
+// server/index.js
+app.use(
+  cors({
+    origin: process.env.CLIENT_URL,
+  }),
+);
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ limit: "50mb", extended: true }));
 
