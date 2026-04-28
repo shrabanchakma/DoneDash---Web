@@ -11,6 +11,7 @@ import DashboardLayout from "./layouts/DashboardLayout";
 import Profile from "./pages/Profile";
 import UnderMaintenance from "./components/UnderMaintenance";
 import { Toaster } from "react-hot-toast";
+import PostJob from "./pages/PostJob/PostJob";
 function App() {
   return (
     <>
@@ -24,7 +25,7 @@ function App() {
           <Route path="/features" element={<UnderMaintenance />} />
           <Route path="/pricing" element={<UnderMaintenance />} />
           <Route path="/how-it-works" element={<UnderMaintenance />} />
-          <Route path="/post-job" element={<UnderMaintenance />} />
+          <Route path="/post-job" element={<PostJob />} />
           <Route path="/my-jobs" element={<UnderMaintenance />} />
           <Route path="/proposals" element={<UnderMaintenance />} />
           <Route path="/browse-jobs" element={<UnderMaintenance />} />

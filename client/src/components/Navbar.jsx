@@ -31,6 +31,7 @@ const Navbar = () => {
     try {
       await signOut(auth);
       // This wipes the React state entirely and redirects to the landing page
+      navigate("/");
     } catch (error) {
       console.error("Logout failed:", error);
     }

@@ -21,11 +21,13 @@ export const createJob = async (req, res) => {
       location,
       deadline,
       budget,
-      imageBase64,
+      imagesBase64,
     } = req.body;
 
     // 1. Upload image using the helper above
-    const imageUrl = await uploadImageToImgbb(imageBase64);
+    const uploadedImageUrls = await Promise.all(
+      imagesBase64.map((image) => uploadImageToImgbb(image)),
+    );
     // const imageUrl = "somethingImage";
 
     // 2. Create database entry
@@ -36,7 +38,7 @@ export const createJob = async (req, res) => {
       location,
       deadline,
       budget,
-      image: imageUrl,
+      images: uploadedImageUrls,
     });
 
     res.status(201).json(job);
@@ -49,3 +51,15 @@ export const createJob = async (req, res) => {
 };
 
 export { uploadImageToImgbb };
+
+// GET all jobs
+export const getJobs = async (req, res) => {
+  try {
+    // .find() gets everything, .sort({ createdAt: -1 }) puts newest first
+    const jobs = await Job.find().sort({ createdAt: -1 });
+
+    res.status(200).json(jobs);
+  } catch (error) {
+    res.status(500).json({ message: "Server Error: Could not fetch jobs" });
+  }
+};
