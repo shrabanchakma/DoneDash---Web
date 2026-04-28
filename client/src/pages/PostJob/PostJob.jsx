@@ -9,6 +9,9 @@ import {
   X,
 } from "lucide-react";
 import api from "../../api/axios";
+import { useAuth } from "../../../context/AuthContext";
+import TakaIcon from "../../components/ui/TakaIcon";
+import { useNavigate } from "react-router-dom";
 
 const categories = [
   "Academic Help",
@@ -29,6 +32,9 @@ const initialForm = {
 };
 
 export default function PostJob() {
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  console.log(user.email);
   const [form, setForm] = useState(initialForm);
   const [loading, setLoading] = useState(false);
   const [focusedField, setFocusedField] = useState(null);
@@ -147,14 +153,16 @@ export default function PostJob() {
       const payload = {
         ...form,
         budget: Number(form.budget),
-        imagesBase64, // ✅ array sent to backend
+        imagesBase64,
+        userEmail: user.email,
+        status: "OPEN",
       };
 
       await api.post("/jobs", payload);
       toast.success("Job posted successfully!");
       setForm(initialForm);
       setImagePreviews([]);
-
+      navigate("/my-jobs");
       if (fileInputRef.current) {
         fileInputRef.current.value = "";
       }
@@ -169,7 +177,7 @@ export default function PostJob() {
   };
 
   return (
-    <div className="min-h-screen w-full bg-gradient-to-b from-[#348293]/15 to-white">
+    <div className="min-h-screen w-full bg-linear-to-b from-[#348293]/15 to-white">
       <div className="mx-auto max-w-7xl px-6 py-10">
         <div className="mb-10">
           <h1 className="text-5xl font-extrabold tracking-tight text-[#348293]">
@@ -321,7 +329,7 @@ export default function PostJob() {
                 }`}
               >
                 <div className="flex items-center justify-center border-r border-slate-200 bg-gray-50 px-6">
-                  <DollarSign className="h-5 w-5 stroke-[2.5px] text-gray-900" />
+                  <TakaIcon className="h-5 w-5 stroke-[2.5px] text-gray-900" />
                 </div>
 
                 <input

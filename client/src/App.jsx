@@ -12,6 +12,9 @@ import Profile from "./pages/Profile";
 import UnderMaintenance from "./components/UnderMaintenance";
 import { Toaster } from "react-hot-toast";
 import PostJob from "./pages/PostJob/PostJob";
+import MyPostedJobs from "./pages/MyPostedJobs/MyPostedJobs";
+import UpdatedJobDetails from "./pages/UpdateJobDetails/UpdateJobDetails";
+import JobFeed from "./pages/JobFeed/JobFeed";
 function App() {
   return (
     <>
@@ -26,7 +29,10 @@ function App() {
           <Route path="/pricing" element={<UnderMaintenance />} />
           <Route path="/how-it-works" element={<UnderMaintenance />} />
           <Route path="/post-job" element={<PostJob />} />
-          <Route path="/my-jobs" element={<UnderMaintenance />} />
+          <Route path="/my-jobs" element={<MyPostedJobs />} />
+          <Route path="/jobs" element={<MyPostedJobs />} />
+          <Route path="/feed" element={<JobFeed />} />
+          <Route path="/jobs/update/:id" element={<UpdatedJobDetails />} />
           <Route path="/proposals" element={<UnderMaintenance />} />
           <Route path="/browse-jobs" element={<UnderMaintenance />} />
           <Route path="/active-tasks" element={<UnderMaintenance />} />
@@ -47,7 +53,6 @@ function App() {
           }
         >
           <Route path="/profile" element={<Profile />} />
-          <Route path="/feed" element={<UnderMaintenance />} />
         </Route>
       </Routes>
     </>

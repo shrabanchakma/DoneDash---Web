@@ -7,10 +7,16 @@ import {
   Star,
   User,
   Clock,
+  Edit3,
+  AlertTriangle,
+  Trash2,
 } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
 
 const JobCard = ({ job }) => {
+  const navigate = useNavigate();
   const {
+    id,
     title,
     description,
     location,
@@ -20,7 +26,10 @@ const JobCard = ({ job }) => {
     assignedTo,
     rating,
   } = job;
-
+  const isLongDescription = description?.length > 178;
+  const displayDescription = isLongDescription
+    ? `${description.substring(0, 178)}...`
+    : description;
   // Status Badge Logic
   const getStatusStyles = () => {
     switch (status) {
@@ -35,11 +44,23 @@ const JobCard = ({ job }) => {
     }
   };
 
+  const handleCardClick = () => {
+    navigate(`/jobs/${id}`);
+  };
+
+  const handleUpdateClick = (e) => {
+    e.stopPropagation(); // Prevents handleCardClick from firing
+    navigate(`/jobs/update/${id}`);
+  };
+
   return (
-    <div className="group flex h-full flex-col rounded-[2.5rem] border border-gray-100 bg-white p-8 shadow-sm transition-all hover:shadow-xl hover:shadow-teal-900/5">
+    <div className="group flex h-full flex-col rounded-[2.5rem] border border-gray-100 bg-white p-8 shadow-sm transition-all hover:shadow-xl hover:shadow-teal-900/5 cursor-pointer">
       {/* Header: Title & Status Badge */}
       <div className="mb-4 flex items-start justify-between gap-4">
-        <h3 className="text-xl font-bold leading-tight text-gray-900 line-clamp-2">
+        <h3
+          onClick={handleCardClick}
+          className="text-xl font-bold leading-tight text-gray-900 line-clamp-2 hover:underline"
+        >
           {title}
         </h3>
         <span
@@ -71,8 +92,13 @@ const JobCard = ({ job }) => {
       </div>
 
       {/* Description */}
-      <p className="mb-8 flex-grow text-sm leading-relaxed text-gray-500 line-clamp-3">
-        {description}
+      <p className="text-sm leading-relaxed text-gray-500">
+        {displayDescription}
+        {isLongDescription && (
+          <span className="ml-1 font-bold text-[#348293] hover:underline">
+            More details
+          </span>
+        )}
       </p>
 
       {/* Footer Divider */}
@@ -90,7 +116,13 @@ const JobCard = ({ job }) => {
             </span>
           </div>
         )}
-
+        <button
+          onClick={handleUpdateClick}
+          className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-[#348293] hover:underline cursor-pointer"
+        >
+          <Edit3 size={14} />
+          Update
+        </button>
         {status === "IN PROGRESS" && (
           <button className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-[#348293] transition hover:opacity-70">
             <MessageSquare size={16} />

@@ -30,6 +30,15 @@ const jobSchema = new mongoose.Schema(
       type: [String],
       required: true,
     },
+    userEmail: {
+      type: String,
+      required: true,
+    },
+    status: {
+      type: String,
+      enum: ["OPEN", "IN PROGRESS", "DONE"],
+      default: "OPEN",
+    },
   },
   { timestamps: true },
 );
